@@ -66,6 +66,7 @@ function App() {
     const [date,setDate]=useState("");
     const [category,setCategory]=useState("Food");
     const [editingId,setEditingId]=useState(null);
+    const [showModal, setShowModal]=useState(false);
 
   
     const scrollToSection=(sectionId)=>{
@@ -134,6 +135,7 @@ function App() {
     setDate("");
     setType("Income");
     setCategory("Food");
+    setShowModal(false);
     return;
       }
       const newTransaction={
@@ -149,7 +151,10 @@ function App() {
 
       setDescription("");
     setAmount("");
+    setDate("");
     setType("Income");
+    setCategory("Food");
+    setShowModal(false);
     }
      const monthlyIncome = Array(12).fill(0);
      const monthlyExpenses =Array(12).fill(0);
@@ -225,6 +230,7 @@ function App() {
   setAmount(String(transaction.amount));
   setDate(transaction.date);
   setCategory(transaction.category);
+  setShowModal(true);
  }
 
   return (
@@ -371,37 +377,38 @@ function App() {
   
 
      <section id="Transactions" className="transactions-section">
-   <form className="transaction-form">
-    <h2>Add Transaction</h2>
-    <p className="form-subtitle">
-      Enter your transaction details below
-    </p>
+     <button 
+     type="button"
+     onClick={()=> setShowModal(true)}
+     >
+      +Add Transaction
+     </button>
 
-    <input 
+      {showModal &&(
+        <div className="modal-overlay">
+          <div className="modal-content">
+      <button
+      type="button"
+      className="modal-close"
+      onClick={()=> setShowModal(false)}
+      >
+        X
+      </button>
+      <form className="transaction-form">
+          
+ 
+        <h2>
+          {editingId !==null ? "Editing Transaction":"Add Transaction"}
+        </h2>
+        <p className="form-subtitle">
+          Enter your transaction details below
+        </p>
+         <input 
     type="text"
     placeholder="Description"
     value={description}
     onChange={(event)=> setDescription(event.target.value)}/>
-  
-  
-  <div className="transaction-type-buttons">
-    <button 
-    type="button"
-    className={type==="Income" ? "type-button income-active":"type-button"}
-    onClick={()=> setType("Income")}
-    >
-      Income
-    </button>
-    <button 
-    type="button"
-    className={type==="Expense"? "type-button expense-active":"type-button"}
-    onClick={()=> setType("Expense")}
-    >
-      Expense
-    </button>
-  </div>
-  
-<select 
+    <select 
 value={category}
 onChange={(event)=> setCategory(event.target.value)}>
   <option value="Food">Food</option>
@@ -409,26 +416,48 @@ onChange={(event)=> setCategory(event.target.value)}>
   <option value="Bills">Bills</option>
   <option value="Shopping">Shopping</option>
   <option value="Other">Other</option>
-</select>
-
-
-  <input
+</select>   
+      <div className="transaction-type-buttons">
+        <button 
+    type="button"
+    className={type==="Income" ? "type-button income-active":"type-button"}
+    onClick={()=> setType("Income")}
+    >
+      Income
+    </button>
+       <button 
+    type="button"
+    className={type==="Expense"? "type-button expense-active":"type-button"}
+    onClick={()=> setType("Expense")}
+    >
+      Expense
+    </button>
+    </div>
+     <input
   type="date"
   value={date}
   onChange={(e)=> setDate(e.target.value)}/>
-
-  <input
+    
+       <input
   type="number"
   placeholder="Amount"
   value={amount}
   onChange={(event)=>setAmount(event.target.value)}/>
 
+  
 <button type="button" onClick={addTransaction}>
  {editingId !== null ? "Save changes" :"Add Transaction"}
   </button>
 </form>
-
 {error && <p className="error-message">{error}</p>}
+      
+          </div>
+        </div>
+        
+      )}
+   
+
+
 
 
   <h2 className="recent-transactions-heading">
@@ -465,8 +494,8 @@ onChange={(event)=>setSearchTerm(event.target.value)} />
      <div className="transaction-actions">
         <button
         type="button"
-         onClick={()=>{("Edit clicked", transaction);
-         editTransaction(transaction); }}>
+         onClick={()=> editTransaction(transaction)}
+         >
           Edit
           </button>
   <button

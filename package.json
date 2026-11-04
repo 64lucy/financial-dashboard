@@ -1,4 +1,4 @@
-{"homepage": "https://64lucy.github.io/financial-dashboard-react/",
+{"homepage": "https://64lucy.github.io/financial-dashboard/",
   "name": "financial-dashboard-react",
   "private": true,
   "version": "0.0.0",
@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy"    :"gh-pages-d dist"
+    "deploy"    :"gh-pages -d dist"
   },
   "dependencies": {
     "lucide-react": "^1.62.0",

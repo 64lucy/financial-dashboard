@@ -332,7 +332,7 @@ button {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
-.transaction-section {
+.transactions-section {
   width: 100%;
   padding: 24px;
   background: white;
@@ -541,7 +541,7 @@ button {
   font-size: 14px;
 }
 
-.report-section {
+.reports-section {
   width: 100%;
   padding: 20px;
   margin-top: 24px;
@@ -553,7 +553,7 @@ button {
 
 .report-cards {
   display: grid;
-  grid-template-columns: repeat(3, minma(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -615,8 +615,8 @@ button {
   }
 
   .cash-flow-chart,
-  .transaction-section,
-  .report-section {
+  .transactions-section,
+  .reports-section {
     width: 100%;
     box-sizing: border-box;
   }
