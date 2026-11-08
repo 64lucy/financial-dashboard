@@ -44,7 +44,6 @@
 
 .transactions-page .transactions-list {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
   gap: 0;
   width: 100%;
@@ -52,7 +51,16 @@
   border-radius: 8px;
   overflow: hidden;
 }
-
+.transactions-page .transactions-list>div {
+  display: grid;
+  grid-template-columns: 0.6fr 0.5fr 0.5fr 0.5fr 0.5fr 0.6fr 0.6fr;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 800px;
+  padding: 16px;
+  border-buttom: 1px solid #e2e8f0;
+}
 .transactions-page .transaction-card {
   display: flex;
   flex-direction: row;
