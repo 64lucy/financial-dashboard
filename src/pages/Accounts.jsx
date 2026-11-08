@@ -23,7 +23,7 @@ function Accounts(){
   const[accountType,setAccountType]=useState("Bank");
   const[accountBalance,setAccountBalance]=useState("");
   const [editingId,setEditingId]=useState(null);
-   console.log(accounts);
+  
    const totalBalance= accounts.reduce(
     (total,account)=>total+ Number(account.balance || 0),0
    );
@@ -50,7 +50,6 @@ const addAccount = () => {
 }
 
   if (editingId !== null) {
-    // Update existing account
     setAccounts(previousAccounts =>
       previousAccounts.map(account =>
         account.id === editingId
@@ -64,7 +63,6 @@ const addAccount = () => {
       )
     );
   } else {
-    // Add a new account
     const newAccount = {
       id: Date.now(),
       name: accountName,
@@ -152,8 +150,7 @@ const addAccount = () => {
                         <button onClick={() => editAccount(account)}>
                           Edit
                            </button>
-                        console.log("Account:", account);
-                         console.log("Balance:", account.balance);
+  
                          return(
                         <div className="account-card" key={account.id}>
                             <h3>{account.name}</h3>
