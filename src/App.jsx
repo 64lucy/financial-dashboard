@@ -41,8 +41,7 @@ function App() {
       return savedTransactions ?JSON.parse(savedTransactions):[];
     });
       
-    console.log("Saved transactions:", localStorage.getItem("transactions"));
-    console.log("Current transactions:", transactions);
+    
 
      let totalIncome=0; 
     for(let i=0; i<transactions.length;i++){
