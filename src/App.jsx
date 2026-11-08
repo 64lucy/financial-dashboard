@@ -1,6 +1,15 @@
 
 import {useEffect,useState} from 'react'
 import './App.css'
+import {Routes,Route,Navigate} from 'react-router-dom';
+import Dashboard from './pages/Dashboard'
+import Accounts from './pages/Accounts'
+import Transactions from './pages/Transactions'
+import Analytics from './pages/Analytics'
+import Budgets from './pages/Budgets'
+import Goals from './pages/Goals'
+import Reports from './pages/Reports'
+import Sidebar from "./components/Sidebar";
 import {
   BarChart,
   Bar,
@@ -14,7 +23,7 @@ import {
   Cell
   }from 'recharts'
 
-
+import {NavLink} from 'react-router-dom'
   import{
   LayoutDashboard,
   Wallet,
@@ -26,11 +35,14 @@ import {
 }from 'lucide-react'
 
 function App() {
-
+ 
     const [transactions, setTranasactions]=useState(()=> {
       const savedTransactions=localStorage.getItem("transactions");
       return savedTransactions ?JSON.parse(savedTransactions):[];
     });
+      
+    console.log("Saved transactions:", localStorage.getItem("transactions"));
+    console.log("Current transactions:", transactions);
 
      let totalIncome=0; 
     for(let i=0; i<transactions.length;i++){
@@ -81,10 +93,10 @@ function App() {
     const [budgets, setBudgets]=useState(()=>{
       const savedBudgets=localStorage.getItem("budgets");
       return savedBudgets? JSON.parse(savedBudgets):[
-      {category:"Food",limit:10000},
-      {category:"Transport",limit:6000},
-      {category:"Bills",limit:8000},
-      {category:"Shopping",limit:9000},
+      {id: 1, category:"Food",limit:10000},
+      {id: 2, category:"Transport",limit:6000},
+      {id: 3, category:"Bills",limit:8000},
+      {id: 4, category:"Shopping",limit:9000},
     ];
     });
 
@@ -233,158 +245,12 @@ function App() {
   setShowModal(true);
  }
 
-  return (
-<div>
-
+ return (
   <div className="dashboard-layout">
-  <div className="sidebarvp">
-    <h1 className="sidebar-logo">
-    <ChartNoAxesCombined size={24}/>
-    Finance</h1>
-    <p onClick={()=>scrollToSection("Dashboard")}><LayoutDashboard size={18}/>Dashboard</p>
-    <p onClick={()=>scrollToSection("Accounts")}><Wallet size={18}/> Accounts</p>
-    <p onClick={()=>scrollToSection("Transactions")}><ArrowLeftRight size={18}/>Transactions</p>
-    <p onClick={()=>scrollToSection("Analytics")}><ChartNoAxesCombined size={18}/> Analytics</p>
-    <p onClick={()=>scrollToSection("Budgets")}><CalendarRange size={18}/> Budgets</p>
-    <p onClick={()=>scrollToSection("Goals")}><Target size={18}/>Goals</p>
-    <p onClick={()=>scrollToSection("Reports")}><FileText size={18}/> Reports</p>
-    </div>
-    
+    <Sidebar/>
+    <main className="main-content">
 
-    <main id="Dashboard" className="dashboard">
-    <header className="dashboard-header">
-  <h1>Financial Dashboard</h1>
-  <p>Here's your financial overview for today</p>
-    </header>
-    
-    
-  <section id="Accounts" className="summary-cards">
-    <div className="card balance-card">
-      <h2>Total Balance</h2>
-      <p>ksh {totalBalance.toLocaleString()}</p>
-    </div>
-
-    <div className="card income-card">
-     <h2>Income</h2>
-     <p>ksh{totalIncome.toLocaleString()}</p> 
-    </div>
-    <div className="card expenses-card">
-      <h2>Expenses</h2>
-      <p>ksh{totalExpenses.toLocaleString()}</p>
-    </div>
-    <div className="card savings-card">
-      <h2>Savings</h2>
-      <p>ksh{totalSavings.toLocaleString()}</p>
-    </div>
-  </section>
-   
-
-      <section id="Analytics" className="overview-card">
-      <section className="spending-Chart">
-        <h2>spending by cartegory</h2>
-        <ResponsiveContainer width="100%" height={720}>
-          <PieChart>
-            <Pie
-            data={spendingData}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            innerRadius={55}
-            outerRadius={window.innerWidth<= 768 ? 95 :140}
-            label
-            >
-              {spendingData.map((entry,index)=>(
-                <Cell 
-                key={entry.name}
-                fill={["brown","#00C49F","#FFBB28","#FF8042"][index]}
-                />
-          
-             ))}
-              </Pie>
-              <Tooltip/>
-              <Legend/>
-              </PieChart>
-              </ResponsiveContainer>
-          </section>    
-
-  <section id="Budgets" className="budgets">
-    <h2>BudgetTracking</h2>
-
-    {budgetData.map((budget)=>(
-      <div className="budget-item" key={budget.category}>
-        <div className="budget-header">
-      <h3>{budget.category}</h3>
-
-      <span>
-        ksh{budget.spent.toLocaleString()} /ksh{""}
-        {budget.limit.toLocaleString()}
-        </span>
-        </div>
-
-        <div className="budget-progress">
-        <div
-        className="budget-progress-fill"
-        style={{
-          width: `${Math.min(budget.percentage,100)}%`,
-        }}
-        />
-      </div>
-      
-
-      <p>{budget.percentage.toFixed(1)}%used</p>
-     
-      
-      <input
-      className="budget-input"
-      type="number"
-      min="1"
-      value={budget.limit}
-      onChange={(event)=>{
-        const newLimit=Number(event.target.value);
-
-        setBudgets((previousBudgets)=>
-        previousBudgets.map((item)=>
-          item.category===budget.category
-        ?{...item,limit:newLimit}
-        :item
-        )
-      );
-    }}
-        />
-        </div>
-  ))}
-  </section>   
-    </section>
-      
-      <div className="cash-flow-layout">
-      <section  id="Goals" className="cash-flow-chart">
-   <h2>Monthly Cash Flow</h2>
-   <ResponsiveContainer width="100%" height={300}>
-    <BarChart data={monthlychartData}>
-      <XAxis dataKey="monthly"/>
-      <YAxis/>
-      <Tooltip/>
-      <Legend/>
-      <Bar dataKey="income" name="Income ksh" fill="#16a34a"/>
-      <Bar dataKey="expenses" name="Expenses (ksh" fill="#ef4444"/>
-      <Bar dataKey="savings" name="Saving (ksh" fill="#3b82f6"/>
-    </BarChart>
-   </ResponsiveContainer>
-   <h2>Monthly savings</h2>
-   </section>
-   </div>
-  
-
-     <section id="Transactions" className="transactions-section">
-     <button 
-     type="button"
-     onClick={()=> setShowModal(true)}
-     >
-      +Add Transaction
-     </button>
-
-      {showModal &&(
+       {showModal &&(
         <div className="modal-overlay">
           <div className="modal-content">
       <button
@@ -455,84 +321,90 @@ onChange={(event)=> setCategory(event.target.value)}>
         </div>
         
       )}
-   
 
-
-
-
-  <h2 className="recent-transactions-heading">
-    Recent Transactions
-  </h2>
-   
-  
-
-<input
-type="text"
-className="transaction-search"
-placeholder="search transactions..."
-value={searchTerm}
-onChange={(event)=>setSearchTerm(event.target.value)} /> 
-
-
-  <div className="transactions-table">
-    <div className="transaction-header">
-      <span>Date</span>
-       <span>Description</span>
-        <span>Category</span>
-       <span>Type</span>
-        <span>Amount</span>
-         <span>Actions</span>
-   </div>
-  {filteredTransactions.map((transaction)=> (
-    <div className="transaction-row" key={transaction.id}>
-         <span>{transaction.date}</span>
-      <span>{transaction.description}</span>
-         <span>{transaction.category}</span>
-      <span>{transaction.type}</span>
-      <span>{transaction.amount}</span>
-       
-     <div className="transaction-actions">
-        <button
-        type="button"
-         onClick={()=> editTransaction(transaction)}
-         >
-          Edit
-          </button>
-  <button
-  type="button"
-   onClick={()=>deleteTransaction(transaction.id)}>
-    Delete
-    </button>
-    </div>
-    </div>
-    ))}
-   </div>
-  </section>
-  <section id="Reports" className="reports-section">
-    <h2>Financial Reports</h2>
-    <div className="report-cards">
-      <div className="report-card">
-        <h3>Total Income</h3>
-        <p>ksh{totalIncome.toLocaleString()}</p>
-      </div>
-      <div className="report-card">
-        <h3>Total Expenses</h3>
-        <p>ksh{totalExpenses.toLocaleString()}</p>
-      </div>
-      <div className="report-card">
-        <h3>Net Savings</h3>
-        <p>ksh{totalSavings.toLocaleString()}</p>
-      </div>
-    </div>
-  </section>
-</main>
-</div>
-</div>
-);
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
+        <Route
+        path="/dashboard"
+        element={
+          <Dashboard
+          totalBalance={totalBalance}
+          totalIncome={totalIncome}
+          totalExpenses={totalExpenses}
+          totalSavings={totalSavings}
+          spendingData={spendingData}
+          monthlychartData={monthlychartData}
+          budgetData={budgetData}
+          setBudgets={setBudgets}
+          showModal={showModal}
+          setShowModal={setShowModal}
+          editingId={editingId}
+          description={description}
+          setDescription={setDescription}
+          type={type}
+          setType={setType}
+          category={category}
+          setCategory={setCategory}
+          date={date}
+          setDate={setDate}
+          amount={amount}
+          setAmount={setAmount}
+          addTransaction={addTransaction}
+          error={error}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          filteredTransactions={filteredTransactions}
+          editTransaction={editTransaction}
+          deleteTransaction={deleteTransaction}
+          />
+         
+        }
+        />
+         <Route path="/accounts" element={<Accounts/>}/>
+          <Route 
+          path="/transactions"
+           element={
+            <Transactions
+          transactions={transactions}
+          deleteTransaction={deleteTransaction}
+          editTransaction={editTransaction}
+          setShowModal={setShowModal}
+          />
+          }
+          />
+           <Route
+            path="/analytics" 
+            element={<Analytics
+            spendingData={spendingData}
+            monthlychartData={monthlychartData}
+            totalIncome={totalIncome}
+            totalExpenses={totalExpenses}
+            totalSavings={totalSavings}
+            />
+            }
+            />
+            <Route
+             path="/budgets"
+              element={<Budgets
+              budgetData={budgetData}
+              setBudgets={setBudgets}
+              />}/>
+             <Route path="/goals" element={<Goals/>}/>
+              <Route path="/reports"
+               element={
+               <Reports
+              transactions={transactions}
+              totalIncome={totalIncome}
+              totalExpenses={totalExpenses}
+              totalSavings={totalSavings}
+              monthlychartData={monthlychartData}
+              spendingData={spendingData}
+              />
+              }
+              />
+      </Routes>
+    </main>
+  </div>
+ );
 }
-export default App ;
-
-
-
-
-      
+export default App;

@@ -1,0 +1,136 @@
+.transactions-page {
+  min-height: 100vh;
+  padding: 30px;
+  background: #172235;
+  color: #1e293b;
+}
+
+.transactions-page .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 25px;
+  color: white;
+}
+
+.transactions-page .page-header h1 {
+  width: 100%;
+  margin: 0;
+  color: white;
+  font-size: 28px;
+}
+
+.transactions-page .page-header p {
+  margin: 0;
+  color: #cbd5e1;
+}
+
+.transactions-page .page-header button {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 7px;
+  background: #16a34a;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.transactions-page .page-header button:hover {
+  background: #15803d;
+}
+
+.transactions-page .transactions-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.transactions-page .transaction-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
+  max-width: none;
+  padding: 18px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.transactions-page .transaction-card h3 {
+  margin: 0 0 12px;
+  color: #1e293b;
+  font-size: 17px;
+}
+
+.transactions-page .transaction-card p {
+  margin: 8px 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.transactions-page .transaction-card h3:last-of-type {
+  margin-top: 18px;
+  color: #16a34a;
+  font-size: 20px;
+}
+
+.transactions-page .transaction-card button {
+  margin: 12px 8px 0 0;
+  padding: 9px 15px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.transactions-page .transaction-card button:first-of-type {
+  background: #2563eb;
+}
+
+.transactions-page .transaction-card button:last-of-type {
+  background: #dc2626;
+}
+
+.transactions-page .transaction-card button:hover {
+  opacity: 0.85;
+}
+
+.transactions-page .transactions-list:empty::after {
+  content: "No transactions available yet.";
+  display: block;
+  width: 100%;
+  padding: 25px;
+  background: white;
+  border-radius: 10px;
+  color: #64748b;
+  text-align: center;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .transactions-page {
+    padding: 18px;
+  }
+
+  .transactions-page .page-header {
+    align-items: flex-start;
+  }
+
+  .transactions-page .transaction-card {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}
