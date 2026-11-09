@@ -36,7 +36,7 @@ import {NavLink} from 'react-router-dom'
 
 function App() {
  
-    const [transactions, setTranasactions]=useState(()=> {
+    const [transactions, setTransactions]=useState(()=> {
       const savedTransactions=localStorage.getItem("transactions");
       return savedTransactions ?JSON.parse(savedTransactions):[];
     });
