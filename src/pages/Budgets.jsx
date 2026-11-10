@@ -8,7 +8,7 @@ function Budgets({ budgetData, setBudgets }) {
       
      try {
     const response = await fetch(
-      `http://localhost:5000/api/budgets/${id}`,
+      `https://financial-dashboard-2nnh.onrender.com/api/budgets/${id}`,
       {
         method: "PUT",
         headers: {

@@ -100,20 +100,20 @@ const [transactions, setTransactions] = useState(() => {
 
 
    useEffect(()=>{
-    fetch("http://localhost:5000/api/transactions")
+    fetch("https://financial-dashboard-2nnh.onrender.com/api/transactions")
     .then(res=>res.json())
     .then(data=>setTransactions(data))
     .catch(error=>console.log(error));
    }, []);
    useEffect(()=>{
-  fetch("http://localhost:5000/api/transactions")
+  fetch("https://financial-dashboard-2nnh.onrender.com/api/transactions")
     .then(res=>res.json())
     .then(data=>setTransactions(data))
     .catch(error=>console.log(error));
 }, []);
 
 useEffect(()=>{
-  fetch("http://localhost:5000/api/budgets")
+  fetch("https://financial-dashboard-2nnh.onrender.com/api/budgets")
     .then(res=>res.json())
     .then(data=>setBudgets(data))
     .catch(error=>console.log(error));
@@ -143,7 +143,7 @@ useEffect(()=>{
       if(editingId !==null){
       try {
         const response = await fetch(
-            `http://localhost:5000/api/transactions/${editingId}`,
+            `https://financial-dashboard-2nnh.onrender.com/api/transactions/${editingId}`,
             {
                 method: "PUT",
                 headers: {
@@ -189,7 +189,7 @@ useEffect(()=>{
       
      try{
       const response =await fetch(
-        "http://localhost:5000/api/transactions",
+        "https://financial-dashboard-2nnh.onrender.com/api/transactions",
         {
           method:"POST",
           headers:{
@@ -292,7 +292,7 @@ useEffect(()=>{
     async function deleteTransaction(id) {
     try {
         const response = await fetch(
-            `http://localhost:5000/api/transactions/${id}`,
+            `https://financial-dashboard-2nnh.onrender.com/api/transactions/${id}`,
             {
                 method: "DELETE"
             }
