@@ -1,16 +1,92 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Financial Dashboard
 
-Currently, two official plugins are available:
+A full-stack financial management application built with React, Node.js, Express, and MongoDB. It helps users track income and expenses, manage budgets, monitor savings goals, and understand their financial activity through interactive charts.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Live Demo
 
-## React Compiler
+View Financial Dashboard
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Features
 
-## Expanding the ESLint configuration
+Dashboard: Overview of income, expenses, balance, and recent transactions.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Transaction Management: Add, view, edit, and delete transactions.
+
+Accounts: Dedicated accounts page.
+
+Analytics: Interactive charts showing spending patterns and cash flow.
+
+Budget Management: Set and update spending limits by category.
+
+Savings Goals: Monitor savings progress.
+
+Reports: Dedicated financial reports page.
+
+Responsive Design: Layout adapted for desktop and mobile screens.
+
+Data Persistence: Transactions and budgets stored through a backend API and MongoDB.
+
+Technologies Used
+
+Frontend
+
+React
+
+JavaScript
+
+Vite
+
+React Router
+
+Recharts
+
+Lucide React
+
+CSS
+
+Backend
+
+Node.js
+
+Express.js
+
+MongoDB
+
+Mongoose
+
+REST API
+
+Screenshots
+
+![Financial Dashboard](screenshots/dashboard.png)
+
+Installation and Setup
+
+Clone the repository:
+
+git clone https://github.com/64lucy/financial-dashboard.git
+
+Navigate to the frontend project:
+
+cd financial-dashboard/financial-dashboard-react
+
+Install dependencies:
+
+npm install
+
+Start the development server:
+
+npm run dev
+
+Open the local URL provided by Vite in your browser.
+
+Project Purpose
+
+This project was developed to apply practical frontend and backend development skills by building a financial management application with real API integration and persistent database storage.
+
+Author
+
+Lucy Murage
+
+GitHub: 64lucy
