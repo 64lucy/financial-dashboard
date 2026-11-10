@@ -35,12 +35,7 @@ import {NavLink} from 'react-router-dom'
 }from 'lucide-react'
 
 function App() {
- 
-const [transactions, setTransactions] = useState(() => {
-  const savedTransactions = localStorage.getItem("transactions");
-  return savedTransactions ? JSON.parse(savedTransactions) : [];
-});
-    
+     const [transactions, setTransactions] = useState([]);
 
      let totalIncome=0; 
     for(let i=0; i<transactions.length;i++){
@@ -78,6 +73,8 @@ const [transactions, setTransactions] = useState(() => {
     const [editingId,setEditingId]=useState(null);
     const [showModal, setShowModal]=useState(false);
 
+    const[isSaving,setSaving]=useState(false);
+
   
     const scrollToSection=(sectionId)=>{
    const section = document.getElementById(sectionId);
@@ -88,43 +85,28 @@ const [transactions, setTransactions] = useState(() => {
   }
   };
 
-    const [budgets, setBudgets]=useState(()=>{
-      const savedBudgets=localStorage.getItem("budgets");
-      return savedBudgets? JSON.parse(savedBudgets):[
-      {id: 1, category:"Food",limit:10000},
-      {id: 2, category:"Transport",limit:6000},
-      {id: 3, category:"Bills",limit:8000},
-      {id: 4, category:"Shopping",limit:9000},
-    ];
-    });
+    const [budgets, setBudgets]=useState([]);
 
-
-   useEffect(()=>{
-    fetch("https://financial-dashboard-2nnh.onrender.com/api/transactions")
-    .then(res=>res.json())
-    .then(data=>setTransactions(data))
-    .catch(error=>console.log(error));
-   }, []);
-   useEffect(()=>{
+useEffect(() => {
   fetch("https://financial-dashboard-2nnh.onrender.com/api/transactions")
-    .then(res=>res.json())
-    .then(data=>setTransactions(data))
-    .catch(error=>console.log(error));
+    .then(res => res.json())
+    .then(data => {
+      setTransactions(data);
+    })
+    .catch(error => console.log(error));
 }, []);
 
-useEffect(()=>{
+   useEffect(() => {
   fetch("https://financial-dashboard-2nnh.onrender.com/api/budgets")
-    .then(res=>res.json())
-    .then(data=>setBudgets(data))
-    .catch(error=>console.log(error));
+    .then(res => res.json())
+    .then(data => {
+      setBudgets(data);
+    })
+    .catch(error => console.log(error));
 }, []);
-
-   useEffect(()=> {
-    localStorage.setItem("budgets", JSON.stringify(budgets));
-   }, [budgets]);
   
      async function addTransaction(){
-
+        console.count("addTransaction called");
       if(!description.trim()){
         setError("please enter a description.");
         return;
@@ -136,10 +118,15 @@ useEffect(()=>{
        }
        setError("");
 
+
       if(!date){
         setError("please select a transaction date.");
         return;
       }
+      
+       if (isSaving) return;
+       setSaving(true);
+
       if(editingId !==null){
       try {
         const response = await fetch(
@@ -174,8 +161,10 @@ useEffect(()=>{
 
     } catch (error) {
         setError(error.message);
+        setSaving(false);
         return;
     }
+    setSaving(false);
     setEditingId(null);
     setDescription("");
     setAmount("");
@@ -215,9 +204,10 @@ useEffect(()=>{
     ]);
     } catch(error){
       setError(error.message);
+       setSaving(false);
       return;
     }
-      
+      setSaving(false);
     setDescription("");
     setAmount("");
     setDate("");
@@ -388,8 +378,12 @@ onChange={(event)=> setCategory(event.target.value)}>
   onChange={(event)=>setAmount(event.target.value)}/>
 
   
-<button type="button" onClick={addTransaction}>
- {editingId !== null ? "Save changes" :"Add Transaction"}
+<button
+  type="button"
+  onClick={addTransaction}
+  disabled={isSaving}
+>
+ {isSaving ? "Saving..." : editingId !== null ? "Save changes" :"Add Transaction"}
   </button>
 </form>
 {error && <p className="error-message">{error}</p>}
