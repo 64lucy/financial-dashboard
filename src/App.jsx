@@ -36,11 +36,10 @@ import {NavLink} from 'react-router-dom'
 
 function App() {
  
-    const [transactions, setTransactions]=useState(()=> {
-      const savedTransactions=localStorage.getItem("transactions");
-      return savedTransactions ?JSON.parse(savedTransactions):[];
-    });
-      
+const [transactions, setTransactions] = useState(() => {
+  const savedTransactions = localStorage.getItem("transactions");
+  return savedTransactions ? JSON.parse(savedTransactions) : [];
+});
     
 
      let totalIncome=0; 
@@ -101,14 +100,17 @@ function App() {
 
 
    useEffect(()=>{
-    localStorage.setItem("transactions",JSON.stringify(transactions));
-   },[transactions]);
+    fetch("http://localhost:5000/api/transactions")
+    .then(res=>res.json())
+    .then(data=>setTransactions(data))
+    .catch(error=>console.log(error));
+   }, []);
 
    useEffect(()=> {
     localStorage.setItem("budgets", JSON.stringify(budgets));
    }, [budgets]);
   
-    function addTransaction(){
+     async function addTransaction(){
 
       if(!description.trim()){
         setError("please enter a description.");
@@ -126,20 +128,41 @@ function App() {
         return;
       }
       if(editingId !==null){
-        setTranasactions((previousTransactions)=>
-        previousTransactions.map((transaction)=>
-        transaction.id===editingId 
-        ?{
-          ...transaction,
-          description:description.trim(),
-          type:type,
-          amount:Number(amount),
-          date:date,
-          category:category,
+      try {
+        const response = await fetch(
+            `http://localhost:5000/api/transactions/${editingId}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    description: description.trim(),
+                    type,
+                    amount: Number(amount),
+                    date,
+                    category
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to update transaction");
         }
-        :transaction
-      )
-    );
+        const updatedTransaction = await response.json();
+
+        setTransactions(previousTransactions =>
+            previousTransactions.map(transaction =>
+                transaction._id === editingId
+                    ? updatedTransaction
+                    : transaction
+            )
+        );
+
+    } catch (error) {
+        setError(error.message);
+        return;
+    }
     setEditingId(null);
     setDescription("");
     setAmount("");
@@ -147,30 +170,52 @@ function App() {
     setType("Income");
     setCategory("Food");
     setShowModal(false);
+  
     return;
       }
-      const newTransaction={
-        id: Date.now(),
-        description:description.trim(),
-        type:type,
-        amount:Number(amount),
-        date:date,
-        category:category,
-      };
       
-      setTranasactions((previousTransactions)=>[...previousTransactions,newTransaction]);
+     try{
+      const response =await fetch(
+        "http://localhost:5000/api/transactions",
+        {
+          method:"POST",
+          headers:{
+            "Content-type": "application/json"
+          },
+          body:JSON.stringify({
+            description:description.trim(),
+            type:type,
+            amount:Number(amount),
+            date:date,
+            category:category
+          })
+        }
+      );
 
-      setDescription("");
+    if(!response.ok){
+      throw new Error("Failed to add transaction");
+    }
+    const newTransaction = await response.json();
+    setTransactions(previousTransactions =>[
+      ...previousTransactions,
+      newTransaction
+    ]);
+    } catch(error){
+      setError(error.message);
+      return;
+    }
+      
+    setDescription("");
     setAmount("");
     setDate("");
     setType("Income");
     setCategory("Food");
     setShowModal(false);
-    }
+  }
      const monthlyIncome = Array(12).fill(0);
      const monthlyExpenses =Array(12).fill(0);
      const monthlySavings =Array(12).fill(0);
-      
+  
      transactions.forEach((transaction)=>{
       const monthIndex=new Date(transaction.date).getMonth();
       if(transaction.type==="Income"){
@@ -214,28 +259,48 @@ function App() {
     });
     
     const spendingData =["Food","Transport","Bills","Shopping"].map(
-      (category)=>({
+      category =>({
               name:category,
               value:transactions
               .filter(
-                (transaction)=>
+                transaction=>
                 transaction.type==="Expense" &&
                 transaction.category===category
 )
-  .reduce((total,transaction)=> total+transaction.amount,0),
+  .reduce(
+    (total,transaction)=> total+transaction.amount,
+    0
+     )
       })
     );
     
   
-    function deleteTransaction(id){
-    setTranasactions((previousTransactions)=>
-    previousTransactions.filter(
-      (transaction)=>transaction.id !== id
-    )
-  );
+    
+    async function deleteTransaction(id) {
+    try {
+        const response = await fetch(
+            `http://localhost:5000/api/transactions/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to delete transaction");
+        }
+
+        setTransactions(previousTransactions =>
+            previousTransactions.filter(
+                transaction => transaction._id !== id
+            )
+        );
+
+    } catch (error) {
+        console.log(error.message);
     }
+}
  function editTransaction(transaction){
-  setEditingId(transaction.id);
+  setEditingId(transaction._id);
   setDescription(transaction.description);
   setType(transaction.type);
   setAmount(String(transaction.amount));

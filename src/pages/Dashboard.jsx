@@ -224,7 +224,7 @@ onChange={(event)=>setSearchTerm(event.target.value)} />
          <span>Actions</span>
    </div>
   {filteredTransactions.map((transaction)=> (
-    <div className="transaction-row" key={transaction.id}>
+    <div className="transaction-row" key={transaction._id}>
          <span>{transaction.date}</span>
       <span>{transaction.description}</span>
          <span>{transaction.category}</span>
@@ -240,7 +240,7 @@ onChange={(event)=>setSearchTerm(event.target.value)} />
           </button>
   <button
   type="button"
-   onClick={()=>deleteTransaction(transaction.id)}>
+   onClick={()=>deleteTransaction(transaction._id)}>
     Delete
     </button>
     </div>

@@ -41,15 +41,26 @@
 .transactions-page .page-header button:hover {
   background: #15803d;
 }
-
 .transactions-page .transactions-list {
   display: flex;
   flex-direction: column;
   gap: 0;
   width: 100%;
-  background: white;
+  background: #ffffff;
   border-radius: 8px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.transactions-page .transactions-list > div {
+  display: grid;
+  grid-template-columns:0.6fr 0.5fr 0.5fr 0.5fr 0.5fr 0.6fr 0.6fr;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 800px;
+  padding: 16px;
+  border-bottom: 1px solid #e2e8f0;
 }
 .transactions-page .transactions-list>div {
   display: grid;
@@ -127,7 +138,7 @@
   text-align: center;
 }
 
-/* Mobile */
+
 @media (max-width: 600px) {
   .transactions-page {
     padding: 18px;

@@ -20,7 +20,7 @@ function Transactions({
         </header>
      <div className="transactions-list">
         {transactions.map((transaction) => (
-          <div className="transaction-card" key={transaction.id}>
+          <div className="transaction-card" key={transaction._id}>
             <h3>{transaction.description}</h3>
             <p>{transaction.category}</p>
             <p>{transaction.date}</p>
@@ -33,7 +33,7 @@ function Transactions({
              <button onClick={() => editTransaction(transaction)}>
                    Edit
                     </button>
-            <button onClick={() => deleteTransaction(transaction.id)}>
+            <button onClick={() => deleteTransaction(transaction._id)}>
               Delete
             </button>
           </div>

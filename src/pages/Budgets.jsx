@@ -8,7 +8,7 @@ function Budgets({ budgetData, setBudgets }) {
 
     setBudgets(previousBudgets =>
       previousBudgets.map(budget =>
-        budget.id === id
+        budget.category === id
           ? { ...budget, limit }
           : budget
       )
@@ -29,7 +29,7 @@ function Budgets({ budgetData, setBudgets }) {
           const remaining = budget.limit - budget.spent;
 
           return (
-            <div className="budget-card" key={budget.id}>
+            <div className="budget-card" key={budget.category}>
               <h3>{budget.category}</h3>
 
               <p>
@@ -63,7 +63,7 @@ function Budgets({ budgetData, setBudgets }) {
                   min="1"
                   defaultValue={budget.limit}
                   onBlur={event =>
-                    updateLimit(budget.id, event.target.value)
+                    updateLimit(budget._id, event.target.value)
                   }
                 />
               </label>
