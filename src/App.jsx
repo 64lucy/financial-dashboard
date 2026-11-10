@@ -105,6 +105,19 @@ const [transactions, setTransactions] = useState(() => {
     .then(data=>setTransactions(data))
     .catch(error=>console.log(error));
    }, []);
+   useEffect(()=>{
+  fetch("http://localhost:5000/api/transactions")
+    .then(res=>res.json())
+    .then(data=>setTransactions(data))
+    .catch(error=>console.log(error));
+}, []);
+
+useEffect(()=>{
+  fetch("http://localhost:5000/api/budgets")
+    .then(res=>res.json())
+    .then(data=>setBudgets(data))
+    .catch(error=>console.log(error));
+}, []);
 
    useEffect(()=> {
     localStorage.setItem("budgets", JSON.stringify(budgets));

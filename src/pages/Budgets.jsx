@@ -1,19 +1,40 @@
 
     import "./Budgets.css";
 function Budgets({ budgetData, setBudgets }) {
-  function updateLimit(id, newLimit) {
+  async function updateLimit(id, newLimit) {
     const limit = Number(newLimit);
 
     if (!Number.isFinite(limit) || limit <= 0) return;
+      
+     try {
+    const response = await fetch(
+      `http://localhost:5000/api/budgets/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ limit })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update budget");
+    }
+
+    const updatedBudget = await response.json();
 
     setBudgets(previousBudgets =>
       previousBudgets.map(budget =>
-        budget.category === id
-          ? { ...budget, limit }
-          : budget
+        budget._id === id ? updatedBudget : budget
       )
     );
+
+  } catch (error) {
+    console.log("Budget update error:", error);
   }
+}
+
     return(
          <div className="budgets-page">
       <header className="page-header">
@@ -29,7 +50,7 @@ function Budgets({ budgetData, setBudgets }) {
           const remaining = budget.limit - budget.spent;
 
           return (
-            <div className="budget-card" key={budget.category}>
+            <div className="budget-card" key={budget._id}>
               <h3>{budget.category}</h3>
 
               <p>
